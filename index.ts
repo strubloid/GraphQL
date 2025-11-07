@@ -21,6 +21,24 @@ const resolvers = {
         review(_: any, args: { id: string }) {
             return db.reviews.find(review => review.id === args.id)
         }
+    },
+    Game: {
+        reviews: (parent: { id: string }) => {
+            return db.reviews.filter(review => review.gameId === parent.id)
+        }
+    },
+    Author: {
+        reviews: (parent: { id: string }) => {
+            return db.reviews.filter(review => review.authorId === parent.id)
+        }
+    },
+    Review: {
+        game: (parent: { gameId: string }) => {
+            return db.games.find(game => game.id === parent.gameId)
+        },
+        author: (parent: { authorId: string }) => {
+            return db.authors.find(author => author.id === parent.authorId)
+        }
     }
 };
 // server setup
@@ -30,8 +48,14 @@ const server = new ApolloServer({
 });
 
 /**
- games{
-    title
+ query GameQuery($id: ID!){
+    game(id: $id) {
+        title,
+        reviews {
+            raiting,
+            content
+        }
+    }
  }
   
  */
