@@ -1,6 +1,7 @@
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 import { typeDefs } from "./schema";
+import { AddGameInput, EditGameInput, GameArgs, AuthorArgs, ReviewArgs, DeleteGameArgs } from "./interfaces";
 
 // db mock
 import db from "./_db"
@@ -41,10 +42,10 @@ const resolvers = {
         }
     },
     Mutation: {
-        deleteGame: (_: any, args: { id: string }) => {
+        deleteGame: (_: any, args: DeleteGameArgs) => {
             return db.games.filter((game) => game.id !== args.id)
         },
-        addGame: (_: any, args: { id: string }) => {
+        addGame: (_: any, args: AddGameInput) => {
             let game = {
                 ...args.game,
                 id: Math.floor(Math.random() * 10000).toString()
